@@ -1,0 +1,104 @@
+// 数据库表 [表名] 的属性枚举
+
+export enum [表名全拼(大驼峰) + Fields] {
+  [表中的字段名] = '[字段名]',
+  [表中的字段名] = '[字段名]',
+  [表中的字段名] = '[字段名]',
+  ...
+}
+
+
+
+// 数据库表 [表名] 映射类
+
+export class [表名全拼(大驼峰)] {
+  [field: string]: string | number | Date | undefined;
+  public [表中的字段名]: [对应的数据类型(string或number或Date(日期)或Buffer(图片))] | undefined;
+  public [表中的字段名]: [对应的数据类型(string或number或Date(日期)或Buffer(图片))] | undefined;
+  public[表中的字段名]: [对应的数据类型(string或number或Date(日期)或Buffer(图片))] | undefined;
+  ...
+
+
+  constructor([表中的字段名] ?: [对应的数据类型], [表中的字段名] ?: [对应的数据类型], ...) {
+    this.[参数名] = [参数名];
+    this.[参数名] = [参数名];
+    this.[参数名] = [参数名];
+    ...
+  }
+
+  // 用于查询的字段
+  static fields(): [表名全拼(大驼峰) + Fields][] {
+    return [
+      [表名全拼(大驼峰) + Fields].'[字段名]',
+      [表名全拼(大驼峰) + Fields].'[字段名]',
+      [表名全拼(大驼峰) + Fields].'[字段名]',
+
+    ];
+  }
+
+  // 数据库表名
+  static table(): string {
+    return '[表名]';
+  }
+
+  // 主键
+  static key(): string {
+    return '[主键名]';
+  }
+
+  // 插入SQL
+  static insertSQL(basic: [表名全拼(大驼峰)]): string {
+    const fields = [表名全拼(大驼峰)].fields();
+    const table = [表名全拼(大驼峰)].table();
+    const values = fields.map(field => {
+      if (basic[field] === undefined) {
+        return 'null';
+      } else {
+        return `'${basic[field]}'`;
+      }
+    });
+    return `insert into ${table} (${fields.join(',')}) values (${values.join(',')})`;
+  }
+
+  // 更新SQL
+  static updateSQL(basic: [表名全拼(大驼峰)], fields: BridgeFields[] = [表名全拼(大驼峰)].fields()): string {
+    const table = [表名全拼(大驼峰)].table();
+    const key = [表名全拼(大驼峰)].key();
+    const values = fields.map(field => {
+      if (basic[field] === undefined || basic[field] === 'undefined') {
+        return "undefined";
+      } else {
+        return `${field}='${basic[field]}'`;
+      }
+    });
+    const Values = values.filter(value => { return value != "undefined" })
+    console.log(Values);
+
+    return `update ${table} set ${Values.join(',')} where ${key}='${basic[key]}'`;
+  }
+
+  // 删除SQL
+  static deleteSQL(basic: [表名全拼(大驼峰)]): string {
+    const table = [表名全拼(大驼峰)].table();
+    const key = [表名全拼(大驼峰)].key();
+    return `delete from ${table} where ${key}='${basic[key]}'`;
+  }
+
+  // 查询所有SQL
+  static selectAllSQL(): string {
+    const table = [表名全拼(大驼峰)].table();
+    return `select * from ${table}`;
+  }
+
+
+  // 查询SQL 函数参数包括：数据对象，字段数组，where条件数组
+  static selectSQL(basic: [表名全拼(大驼峰)], fields: [表名全拼(大驼峰) + Fields][] = [表名全拼(大驼峰)].fields(), where ?: [表名全拼(大驼峰) + Fields][]): string {
+    const table = [表名全拼(大驼峰)].table();
+    const w = where && where.length > 0 ? ' where ' + where.join(' and ') : '';
+    const f = fields && fields.length > 0 ? fields.join(',') : '*';
+    return `select ${f} from ${table} ${w}`;
+  }
+}
+
+
+我将提供一个ts代码模板，你需要将所有里面有中文的中括号区域都替换为相应的字段，我还会提供数据库表。你只需要将替换好的代码发给我就行
